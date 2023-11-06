@@ -26,7 +26,7 @@ public class RangeSlider extends JSlider {
      * values.
      */
     public RangeSlider(int min, int max) {
-        super(0, 100000);
+        super(min, max);
         initSlider();
     }
 

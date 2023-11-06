@@ -49,7 +49,7 @@ public class Inventory extends JFrame{
     private int currentPage = 1;
     private int itemsPerPage = 15;
     private int totalProducts = 100;
-    private int totalPages= (int) Math.ceil((double) totalProducts / itemsPerPage);;
+    private int totalPages= (int) Math.ceil((double) totalProducts / itemsPerPage);
 	private JLabel btnPage1, btnPage2, btnPage3, btnPage4, btnPage5, btnPage6, btnPage7;
 	private JCheckBox isActive;
 	private JButton prevButton;
@@ -88,15 +88,16 @@ public class Inventory extends JFrame{
         
         JLabel btnAdd = new JLabel("#Ma san pham");
         btnAdd.setFont(new Font(Font.MONOSPACED, Font.ITALIC, 12));
+        btnAdd.setBorder(BorderFactory.createEmptyBorder(0,0, 10,0));
         productCard.add(p1);
         productCard.add(p2);
         productCard.add(p3);
         p1.add(imageLabel);
         p2.add(lblProductName);
-        p1.setPreferredSize(new Dimension(100, 118));
-        p2.setPreferredSize(new Dimension(100, 15));
-        p3.setPreferredSize(new Dimension(100, 15));
         p3.add(btnAdd);
+        p1.setPreferredSize(new Dimension(100, 118));
+        p2.setPreferredSize(new Dimension(100, 13));
+        p3.setPreferredSize(new Dimension(100, 10));
         return productCard;
 	}
 	private Image createImage(String imagePath, int width, int height) {
@@ -330,7 +331,7 @@ public class Inventory extends JFrame{
 	        Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE};  // Màu sắc
 	        String title = "Biểu đồ hình tròn";
 		sidebar.add(new PieChart(data, labels, colors, title));
-		b.add(new RangeSliderDemo().display(0, 100000000));
+		b.add(new RangeSliderDemo("ĐƠN GIÁ TỪ: ", "ĐƠN GIÁ ĐẾN: ").display(0, 100000000));
         b.add(Box.createVerticalStrut(10));
 		b.add(panel);
 		b.add(scrollPane);

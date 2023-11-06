@@ -37,7 +37,8 @@ class PieChart extends JComponent {
 
         g2.setFont(new Font("SansSerif", Font.BOLD, 18));
         g2.setColor(Color.BLACK);
-        g2.drawString(title, (width - g2.getFontMetrics().stringWidth(title)) / 2, 20);
+        System.out.println(height);
+        g2.drawString(title, (width - g2.getFontMetrics().stringWidth(title)) / 2, height/7-20);
 
         for (int i = 0; i < data.length; i++) {
             double angle = (data[i] / total) * 360;

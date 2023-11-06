@@ -29,19 +29,19 @@ public class RangeSliderDemo extends JPanel {
     private JTextField rangeSliderValue2 = BTextField();
     private RangeSlider rangeSlider = new RangeSlider();
     private NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-    public RangeSliderDemo() {
+    public RangeSliderDemo(String s1, String s2) {
         setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
         setLayout(new GridBagLayout());
         
         
-        rangeSliderLabel1.setText("ĐƠN GIÁ TỪ: ");
-        rangeSliderLabel2.setText("ĐƠN GIÁ ĐẾN: ");
+        rangeSliderLabel1.setText(s1);
+        rangeSliderLabel2.setText(s2);
         rangeSliderValue1.setHorizontalAlignment(JLabel.LEFT);
         rangeSliderValue2.setHorizontalAlignment(JLabel.LEFT);
         
         rangeSlider.setPreferredSize(new Dimension(240, rangeSlider.getPreferredSize().height));
         rangeSlider.setMinimum(0);
-        rangeSlider.setMaximum(100000000);
+        rangeSlider.setMaximum(100);
         
         // Add listener to update display.
         rangeSlider.addChangeListener(new ChangeListener() {
