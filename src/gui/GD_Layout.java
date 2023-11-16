@@ -10,40 +10,39 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.awt.event.MouseAdapter;
+import java.io.FileInputStream;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.JSeparator;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
+import javax.swing.plaf.basic.BasicSeparatorUI;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-
-public class Layout extends JFrame{
+public abstract class GD_Layout extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JLabel btnPage1, btnPage2, btnPage3, btnPage4, btnPage5, btnPage6, btnPage7;
-	
-	//Contructor
-	public Layout() {
-		super("Layout");
+	public GD_Layout(String title) {
+		super(title);
 		setSize(1400, 1000);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		
 		JPanel pMenu = menuUI();
-		JPanel nav = navUI();
+		JPanel toolbar = toolbarUI();
 		JPanel main = mainUI();
 		JPanel sidebar = sidebarUI();
 		ImageIcon bg = new ImageIcon(createImage("img/products/UI.png", 1400, 1000));
@@ -51,13 +50,10 @@ public class Layout extends JFrame{
 		this.add(bgi);
 		this.add(main);
 		this.add(pMenu, BorderLayout.SOUTH);
-		this.add(nav, BorderLayout.NORTH);
+		this.add(toolbar, BorderLayout.NORTH);
 		this.add(sidebar, BorderLayout.WEST);
-		
 	}
-	
-	//Phần trên cùng
-	public JPanel navUI() {
+	public JPanel toolbarUI() {
 		JPanel toolbar = new JPanel(new BorderLayout());
 		JPanel title = new JPanel();
 		JPanel titleside = new JPanel();
@@ -109,8 +105,7 @@ public class Layout extends JFrame{
 		
 		editicon.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		addicon.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 10));
-		CustomSeparator separator = new CustomSeparator(Color.black, 1, 20);
-		CustomSeparator separator2 = new CustomSeparator(Color.black, 1, 40);
+		JSeparator separator = createCustomSeparator(Color.black, 1, 20);
 		titleside.add(helpicon);
 		titleside.add(separator);
 		titleside.add(wishlisticon);
@@ -136,18 +131,16 @@ public class Layout extends JFrame{
 		toolbar.setPreferredSize(new Dimension(150, 50));
 		return toolbar;
 	}
-	
-	//Phần bên trái
 	public JPanel sidebarUI() {
 		JPanel sidebar = new JPanel(new BorderLayout());
-		String[] filter = {"-", "-", "-", "-", "-", "-"};
+		String[] filter = {"Asus", "Dell", "Mac", "Legend", "LG", "Lenovo"};
 		// Create a JPanel to hold the title label and JList
         JPanel panel = new JPanel();
         Box b = Box.createVerticalBox();
         panel.setLayout(new BorderLayout());
 
         // Create a title label
-        JLabel titleLabel = new JLabel("THÔNG TIN CẦN LỌC:");
+        JLabel titleLabel = new JLabel("THƯƠNG HIỆU");
         panel.add(titleLabel);
         DefaultListModel<String> listModel = new DefaultListModel<>();
         for(int i = 0; i < filter.length; i++)
@@ -156,7 +149,7 @@ public class Layout extends JFrame{
         JList<String> jList = new JList<>(listModel);
         jList.setVisibleRowCount(4);
         jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        jList.setCellRenderer(new ClickableListCellRenderer());
+//        jList.setCellRenderer(new ClickableListCellRenderer());]
         jList.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -174,7 +167,7 @@ public class Layout extends JFrame{
 	        Color[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE};  // Màu sắc
 	        String title = "Biểu đồ hình tròn";
 		sidebar.add(new PieChart(data, labels, colors, title));
-		b.add(new RangeSliderDemo("...TỪ: ", "...ĐẾN: ").display(0, 100));
+		b.add(new RangeSliderDemo("ĐƠN GIÁ TỪ: ", "ĐƠN GIÁ ĐẾN: ").display(0, 100000000));
         b.add(Box.createVerticalStrut(10));
 		b.add(panel);
 		b.add(scrollPane);
@@ -184,46 +177,7 @@ public class Layout extends JFrame{
 		sidebar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		return sidebar;
 	}
-	
-	//Phần trung tâm
-	public JPanel mainUI() {
-		JPanel main = new JPanel();
-		
-		main.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		main.setBorder(BorderFactory.createTitledBorder("Danh sách..."));
-		
-		return main;
-	}
-	
-	//Phần bên dưới
-	public JPanel menuUI() {
-		JPanel pMenu = new JPanel(new GridLayout(1, 7));
-		btnPage1 = createStyledLabel("<html><b style='color: #ffffff'>BÁN HÀNG - F1</b></html>");
-        btnPage2 = createStyledLabel("<html><b style='color: #ffffff'>SẢN PHẨM - F2</b></html>");
-        btnPage3 = createStyledLabel("<html><b style='color: #ffffff'>KHÁCH HÀNG - F3</b></html>");
-        btnPage4 = createStyledLabel("<html><b style='color: #ffffff'>NHÂN VIÊN - F4</b></html>");
-        btnPage5 = createStyledLabel("<html><b style='color: #ffffff'>THỐNG KÊ - F5</b></html>");
-        btnPage6 = createStyledLabel("<html><b style='color: #ffffff'>HOÁ ĐƠN - F6</b></html>");
-        btnPage7 = createStyledLabel("<html><b style='color: #ffffff'>NHÀ CUNG CẤP - F7</b></html>");
-        btnPage1.addMouseListener(createHoverEffect(btnPage1));
-        btnPage2.addMouseListener(createHoverEffect(btnPage2));
-        btnPage3.addMouseListener(createHoverEffect(btnPage3));
-        btnPage4.addMouseListener(createHoverEffect(btnPage4));
-        btnPage5.addMouseListener(createHoverEffect(btnPage5));
-        btnPage6.addMouseListener(createHoverEffect(btnPage6));
-        btnPage7.addMouseListener(createHoverEffect(btnPage7));
-		pMenu.setPreferredSize(new Dimension(1000, 50));
-		pMenu.add(btnPage1);
-		pMenu.add(btnPage2);
-		pMenu.add(btnPage3);
-		pMenu.add(btnPage4);
-		pMenu.add(btnPage5);
-		pMenu.add(btnPage6);
-		pMenu.add(btnPage7);
-		return pMenu;
-	}
-	
-	//Các hàm xử lý
+	public abstract JPanel mainUI();
 	private JLabel createStyledLabel(String text) {
         JLabel label = new JLabel(text);
         label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -247,7 +201,58 @@ public class Layout extends JFrame{
             }
         };
     }
-    private Image createImage(String imagePath, int width, int height) {
+
+	public JPanel menuUI() {
+		JPanel pMenu = new JPanel(new GridLayout(1, 7));
+		btnPage1 = createStyledLabel("<html><b style='color: #ffffff'>BÁN HÀNG</b></html>");
+        btnPage2 = createStyledLabel("<html><b style='color: #ffffff'>SẢN PHẨM</b></html>");
+        btnPage3 = createStyledLabel("<html><b style='color: #ffffff'>KHÁCH HÀNG</b></html>");
+        btnPage4 = createStyledLabel("<html><b style='color: #ffffff'>NHÂN VIÊN</b></html>");
+        btnPage5 = createStyledLabel("<html><b style='color: #ffffff'>THỐNG KÊ</b></html>");
+        btnPage6 = createStyledLabel("<html><b style='color: #ffffff'>HOÁ ĐƠN</b></html>");
+        btnPage7 = createStyledLabel("<html><b style='color: #ffffff'>NHÀ CUNG CẤP</b></html>");
+        btnPage1.addMouseListener(createHoverEffect(btnPage1));
+        btnPage2.addMouseListener(createHoverEffect(btnPage2));
+        btnPage3.addMouseListener(createHoverEffect(btnPage3));
+        btnPage4.addMouseListener(createHoverEffect(btnPage4));
+        btnPage5.addMouseListener(createHoverEffect(btnPage5));
+        btnPage6.addMouseListener(createHoverEffect(btnPage6));
+        btnPage7.addMouseListener(createHoverEffect(btnPage7));
+		pMenu.setPreferredSize(new Dimension(1000, 50));
+		pMenu.add(btnPage1);
+		pMenu.add(btnPage2);
+		pMenu.add(btnPage3);
+		pMenu.add(btnPage4);
+		pMenu.add(btnPage5);
+		pMenu.add(btnPage6);
+		pMenu.add(btnPage7);
+		return pMenu;
+	}
+	public void createBorder(JPanel p, int i) {
+		p.setBorder(BorderFactory.createLineBorder(Color.BLACK, i));
+	}
+	public static JSeparator createCustomSeparator(Color color, int thickness, int height) {
+        JSeparator separator = new JSeparator();
+        separator.setOpaque(true);
+        separator.setBackground(color);
+
+        separator.setUI(new BasicSeparatorUI() {
+            @Override
+            public void paint(Graphics g, JComponent c) {
+                g.setColor(color);
+                int x = (c.getWidth() - thickness) / 2;
+                g.fillRect(x, 0, thickness, height);
+            }
+
+            @Override
+            public Dimension getPreferredSize(JComponent c) {
+                return new Dimension(thickness, height);
+            }
+        });
+
+        return separator;
+    }
+	private Image createImage(String imagePath, int width, int height) {
 		 try {
 			BufferedImage originalImage = ImageIO.read(new FileInputStream(imagePath));
 	        BufferedImage resizedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -261,21 +266,7 @@ public class Layout extends JFrame{
 			e.printStackTrace();
 		}
 		return null;
-    }
-	public void createBorder(JPanel p, int i) {
-		p.setBorder(BorderFactory.createLineBorder(Color.BLACK, i));
-	}
-	public JTextField BTextField(int size) {
-		JTextField txt = new JTextField(size);
-        txt.setBackground(new Color(0, 0, 0, 0));
-		txt.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.WHITE));
-		txt.setHorizontalAlignment(JTextField.CENTER);
-		return txt;
-	}
-	
-	
-	public static void main(String[] args) {
-		new Layout().setVisible(true);
-	}
-}
 
+  }
+
+}
